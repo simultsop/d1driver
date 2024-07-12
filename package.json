@@ -5,7 +5,10 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
-	"test": "node --test --loader ts-node/esm src/**/*.test.ts"
+	"test": "node --test --loader ts-node/esm src/**/*.test.ts",
+	"build": "tsc --build",
+	"clean": "tsc --build --clean",
+	"prepare": "npm run clean && npm run build"
   },
   "files": [
 	"dist"
