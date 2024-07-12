@@ -3,7 +3,7 @@
 A lightweight TypeScript wrapper providing a simple interface to interact with SQLite D1 databases within workerd runtime intended for prototyping. Reducing SQL boilerplate to get, create, update, and remove functions. Not interfering with sqlite functionality.
 
 # Installation
-```bash npm install @simultsop/d1driver```
+```sh npm install @simultsop/d1driver```
 
 # Usage
 ```node 
