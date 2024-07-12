@@ -8,7 +8,7 @@ A lightweight TypeScript wrapper providing a simple interface to interact with S
 # Usage
 ```node 
 
-import { get, create, update } from '@simultsop/d1driver'
+import { get, create, update, remove } from '@simultsop/d1driver'
 
 interface Env {
   DB: D1Database;
