@@ -11,7 +11,7 @@ A lightweight TypeScript wrapper providing a simple interface to interact with S
 import { get, create, update } from '@simultsop/d1driver'
 
 interface Env {
-	KV: KVNamespace;
+  DB: D1Database;
 }
 
 export const onRequestGet: PagesFunction<Env> = async (context) => {
