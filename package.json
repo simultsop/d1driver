@@ -20,5 +20,19 @@
     "typescript": "^5.3.3",
     "vitest": "^2.0.3"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "description": "A simple cloudflare d1 driver",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simultsop/d1driver.git"
+  },
+  "keywords": [
+    "cloudflare",
+    "d1driver"
+  ],
+  "author": "simultsop",
+  "bugs": {
+    "url": "https://github.com/simultsop/d1driver/issues"
+  },
+  "homepage": "https://github.com/simultsop/d1driver#readme"
 }
