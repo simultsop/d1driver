@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "type": "module",
   "main": "dist/index.js",
+  "private": false,
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "node --test --loader ts-node/esm src/**/*.test.ts",
@@ -18,5 +19,6 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
     "vitest": "^2.0.3"
-  }
+  },
+  "license": "MIT"
 }
