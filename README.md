@@ -32,7 +32,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     title: formData.get('title'),
     content: formData.get('content'),
     image: formData.get('imageUrl'),
-    createdAt: new Date() // or if you set current timestamp on schema do not provide createdAt at all
+    createdAt: "CURRENT TIMESTAMP"
   }
 
   const { success, results } = await create(
@@ -58,7 +58,7 @@ export const onRequestPatch: PagesFunction<Env> = async (context) => {
     title: formData.get('update-title'),
     content: formData.get('update-content'),
     image: formData.get('update-imageUrl'),
-    updatedAt: new Date() // or if you set current timestamp on schema do not provide updatedAt at all
+    updatedAt: "CURRENT TIMESTAMP"
   }
 
   const { success, results } = await update(
