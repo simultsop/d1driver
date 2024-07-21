@@ -1,13 +1,15 @@
 {
 	"compilerOptions": {
 		"strict": true,
-    "skipLibCheck": true,
+    	"skipLibCheck": true,
 		"sourceMap": true,
 		"target": "esnext",
-		"module": "ESNext",
+		"module": "esnext",
 		"moduleResolution": "Bundler",
 		"declaration": true,
-		"outDir": "dist"
+		"outDir": "dist",
+		"lib": ["esnext"],
+		"types": ["@cloudflare/workers-types"]
 	},
 	"include": [
 		"src/**/*.*"

@@ -5,6 +5,8 @@
 
 enum SQLiteSyntax {
     SELECT = "SELECT",
+    IS_NULL = "IS NULL",
+    IS_NOT_NULL = "IS NOT NULL",
     ALL = "*",
     FROM = "FROM",
     WHERE = "WHERE",
@@ -15,7 +17,8 @@ enum SQLiteSyntax {
     VALUES = "VALUES",
     UPDATE = "UPDATE",
     SET = "SET",
-    RETURNING = "RETURNING"
+    RETURNING = "RETURNING",
+    CURRENT_TIMESTAMP = "CURRENT_TIMESTAMP"
 }
 
 /**
@@ -27,12 +30,17 @@ enum SQLiteSyntax {
  * @param {string|undefined} fields Coma separated field names of the table defaults to *.
  */
 export const get = async(DB: D1Database, table: string, conditions?: object, fields?: string) => {
+    const nullConditions: string[] = []
     const conditionsPlacement: string[] = []
     const bindingConditions: string[] = []
 
     if(conditions) {
         let conditionsCounter = 1;
         for (const [key, value] of Object.entries(conditions)) {
+            if(value === null) {
+                nullConditions.push(` ${key} ${SQLiteSyntax.IS_NULL} `)
+                continue;
+            }
             conditionsPlacement.push(` ${key} = ?${conditionsCounter} `)
             bindingConditions.push(value)
             conditionsCounter++;
@@ -43,7 +51,9 @@ export const get = async(DB: D1Database, table: string, conditions?: object, fie
         .prepare(
             `${SQLiteSyntax.SELECT} ${fields ?? SQLiteSyntax.ALL} `+
             `${SQLiteSyntax.FROM} ${table} `+
-            `${ conditions ? SQLiteSyntax.WHERE + conditionsPlacement.join(' ' + SQLiteSyntax.AND + ' ') : '' } `
+            `${ conditions ? SQLiteSyntax.WHERE + conditionsPlacement.join(` ${SQLiteSyntax.AND} `) : '' } `+
+            `${ nullConditions.length===1 ? SQLiteSyntax.AND + nullConditions[0] : '' } `+
+            `${ nullConditions.length>1 ? SQLiteSyntax.AND + nullConditions.join(` ${SQLiteSyntax.AND} `) : '' } `
         )
         .bind(...bindingConditions)
         .all();
@@ -88,11 +98,17 @@ export const create = async(DB: D1Database, table: string, entity: object) => {
  * @param {object|undefined} entity Object model to be inserted e.g.: { age: 45 }
  */
 export const update = async(DB: D1Database, table: string, entity: object, conditions?: object) => {
+    const timestampUpdates: string[] = []
     const fieldsPlacement: string[] = []
     const bindingValues: string[] = []
 
     let fieldsCounter = 1;
     for (const [key, value] of Object.entries(entity)) {
+        if(value === SQLiteSyntax.CURRENT_TIMESTAMP) {
+            timestampUpdates.push(` ${key} = ${SQLiteSyntax.CURRENT_TIMESTAMP} `)
+            continue;
+        }
+
         fieldsPlacement.push(` ${key} = ?${fieldsCounter} `)
         bindingValues.push(value)
         fieldsCounter++;
@@ -115,6 +131,8 @@ export const update = async(DB: D1Database, table: string, entity: object, condi
     return DB
         .prepare(
             `${SQLiteSyntax.UPDATE} ${table} ${SQLiteSyntax.SET} `+ 
+            `${ timestampUpdates.length===1 ? timestampUpdates[0] + ', ' : '' } `+
+            `${ timestampUpdates.length>1 ? timestampUpdates.join(', ').slice(0, -2) : '' } `+
             `${ fieldsPlacement.length>0 ? fieldsPlacement.join(', ').slice(0, -2) : '' } `+
             `${ conditions ? SQLiteSyntax.WHERE + conditionsPlacement.join(' ' + SQLiteSyntax.AND + ' ') : '' } `
         )
@@ -129,7 +147,7 @@ export const update = async(DB: D1Database, table: string, entity: object, condi
  * @param {string} table Table name.
  * @param {object|undefined} conditions Object of conditions, e.g.: {status: 1, username: "john"}.
  */
-export const remove = async(DB: D1Database, table: string, conditions?: object) => {
+export const remove = async(DB: D1Database, table: string, conditions?: object, softRemove?: boolean) => {
     const conditionsPlacement: string[] = []
     const bindingConditions: string[] = []
 
@@ -139,6 +157,13 @@ export const remove = async(DB: D1Database, table: string, conditions?: object) 
             conditionsPlacement.push(` ${key} = ?${conditionsCounter} `)
             bindingConditions.push(value)
             conditionsCounter++;
+        }
+    }
+
+    if(softRemove===true) {
+        const { results: existingEntity } = await get(DB, table, conditions);
+        if(existingEntity.length === 1 && existingEntity[0].deletedAt === null) {
+            return update(DB, table, { deletedAt: SQLiteSyntax.CURRENT_TIMESTAMP }, conditions);
         }
     }
 

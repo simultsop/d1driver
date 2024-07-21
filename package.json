@@ -1,21 +1,22 @@
 {
-  "name": "@simultsop/d1driver",
+  "name": "@s38n/d1driver",
   "version": "0.0.1",
   "type": "module",
   "main": "dist/index.js",
-  "type": "module",
+  "types": "dist/index.d.ts",
   "scripts": {
-	"test": "node --test --loader ts-node/esm src/**/*.test.ts",
-	"build": "tsc --build",
-	"clean": "tsc --build --clean",
-	"prepare": "npm run clean && npm run build"
+    "test": "node --test --loader ts-node/esm src/**/*.test.ts",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
+    "prepare": "npm run clean && npm run build"
   },
   "files": [
-	"dist"
+    "dist"
   ],
   "devDependencies": {
-	"@cloudflare/workers-types": "^4.20240208.0",
-	"ts-node": "^10.9.2",
-	"typescript": "^5.3.3"
+    "@cloudflare/workers-types": "^4.20240208.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3",
+    "vitest": "^2.0.3"
   }
 }
