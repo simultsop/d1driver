@@ -32,7 +32,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     title: formData.get('title'),
     content: formData.get('content'),
     image: formData.get('imageUrl'),
-    createdAt: "CURRENT TIMESTAMP"
+    createdAt: "CURRENT_TIMESTAMP"
   }
 
   const { success, results } = await create(
@@ -58,7 +58,7 @@ export const onRequestPatch: PagesFunction<Env> = async (context) => {
     title: formData.get('update-title'),
     content: formData.get('update-content'),
     image: formData.get('update-imageUrl'),
-    updatedAt: "CURRENT TIMESTAMP"
+    updatedAt: "CURRENT_TIMESTAMP"
   }
 
   const { success, results } = await update(
