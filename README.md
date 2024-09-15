@@ -3,12 +3,12 @@
 A lightweight TypeScript wrapper providing a simple interface to interact with SQLite D1 databases within workerd runtime intended for prototyping. Reducing SQL boilerplate to get, create, update, and remove functions. Not interfering with sqlite functionality.
 
 # Installation
-```npm install @s38n/d1driver```
+```npm install @s32n/d1driver```
 
 # Usage
 ```node 
 
-import { get, create, update, remove } from '@s38n/d1driver'
+import { get, create, update, remove } from '@s32n/d1driver'
 
 interface Env {
   DB: D1Database;
